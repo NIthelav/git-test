@@ -38,5 +38,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Installing deps
+        run: npm ci
       - name: Ticket update
         run: TOKEN=${{ env.TOKEN }} npm run deploy
