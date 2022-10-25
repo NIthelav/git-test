@@ -7,6 +7,8 @@ const tagName = process.env.TAGNAME;
 
 console.log(`OAuth ${OAuth}`);
 
+console.log(process.env);
+
 // const formater = new Intl.DateTimeFormat("en-US");
 
 // axios
