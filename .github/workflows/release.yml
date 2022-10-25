@@ -29,7 +29,7 @@ jobs:
       AUTOR: ${{ github.actor }}
       REF: ${{ GITHUB_REF }}
     runs-on: ubuntu-latest
-        strategy:
+    strategy:
       matrix:
         node-version: [16.16.0]
     steps:
@@ -41,4 +41,3 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Ticket update
         run: TOKEN=${{ env.TOKEN }} npm run deploy
-
