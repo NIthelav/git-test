@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - "rc-0.0.*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.16.0]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Installing deps
+        run: npm ci
+      - name: Testing
+        run: npm test
+  deploy:
+    needs: test
+    env:
+      TOKEN: ${{ secrets.OAUTH }}
+      AUTOR: ${{ github.actor }}
+      REF: ${{ GITHUB_REF }}
+    runs-on: ubuntu-latest
+        strategy:
+      matrix:
+        node-version: [16.16.0]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Ticket update
+        run: TOKEN=${{ env.TOKEN }} npm run deploy
+
