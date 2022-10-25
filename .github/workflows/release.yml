@@ -27,7 +27,6 @@ jobs:
     env:
       TOKEN: ${{ secrets.OAUTH }}
       AUTOR: ${{ github.actor }}
-      REF: ${{ GITHUB_REF }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
