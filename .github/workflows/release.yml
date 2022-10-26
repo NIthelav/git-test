@@ -48,6 +48,6 @@ jobs:
       - name: Creating Docker Image
         uses: actions/docker-buildx@
       - name: Manual docker
-        uses: docker build . --file DockerFile --tag tag
+        run: docker build . --file DockerFile --tag tag
       # - name: Sending comment with docker image tag
       #   run: 123
