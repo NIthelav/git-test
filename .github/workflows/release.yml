@@ -38,7 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: $GITHUB_REF
+          ref: ${{ github.ref }}
           fetch-depth: 0
       - name: Setup node
         uses: actions/setup-node@v1
