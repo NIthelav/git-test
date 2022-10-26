@@ -3,21 +3,24 @@ const exec = require("util").promisify(require("child_process").exec);
 
 const sc = (str, s) => str.split(s).filter(Boolean);
 
-const getTagName = (tags) => tags.match(/rc-[0-9].[0-9].[0-9]/)?.[0];
+const getTagName = (tags) => tags.match(/rc-\d+\.\d+\.\d+/)?.[0];
 
 const createCommitHistory = (commits, lastTagName) => {
-  const tagBefore = lastTagName.slice(0, -1) + (lastTagName.slice(-1) - 1);
+  const tagBefore =
+    lastTagName.replace(/(rc-\d+\.\d+\.)\d+/, "$1") +
+    (lastTagName.replace(/rc-\d+\.\d+\.(\d+)/, "$1") - 1);
   let isOver = false;
 
   return commits.order.reduce((acc, cur) => {
     if (isOver) return acc;
 
     const hashData = commits.data[cur];
-    console.log(hashData);
     const nextTagName = getTagName(hashData.tags || "");
 
     if (!nextTagName || nextTagName !== tagBefore) {
-      return acc.concat(`${hashData.login}-${hashData.title}`);
+      return acc.concat(
+        `${hashData.hash}: ${hashData.login}-${hashData.title}`
+      );
     }
     isOver = true;
     return acc;
@@ -25,8 +28,7 @@ const createCommitHistory = (commits, lastTagName) => {
 };
 
 const OAuth = process.env.TOKEN;
-
-console.log(process.env);
+const pusherName = process.env.ACTOR;
 
 (async () => {
   const { stdout } = await exec(
@@ -52,10 +54,9 @@ console.log(process.env);
     ),
   };
 
-  console.log(commits);
-
   const tagName = getTagName(commits.data[commits.order[0]].tags);
   const commitHistory = createCommitHistory(commits, tagName);
+  const description = `Ответственный за релиз - ${pusherName}\n ___\nКоммиты попавшие в релиз:`;
   const formater = new Intl.DateTimeFormat("en-US");
 
   axios.patch(
@@ -64,7 +65,7 @@ console.log(process.env);
       summary: `Релиз ${tagName} - ${formater.format(new Date())}`,
       description: commitHistory.reduce(
         (acc, cur) => `${acc}\n${cur}`,
-        "Коммиты попавшие в релиз:"
+        description
       ),
     },
     {

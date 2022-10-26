@@ -29,7 +29,7 @@ jobs:
     needs: test
     env:
       TOKEN: ${{ secrets.OAUTH }}
-      AUTOR: ${{ github.actor }}
+      ACTOR: ${{ github.actor }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -51,6 +51,6 @@ jobs:
       - name: Creating Docker Image
         uses: docker/setup-buildx-action@v2
       - name: Manual docker
-        run: docker build . --file DockerFile --tag tag
+        run: docker build . --tag ${{ github.ref_name}}
       # - name: Sending comment with docker image tag
       #   run: 123
