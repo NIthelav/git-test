@@ -48,12 +48,8 @@ const OAuth = process.env.TOKEN;
     ),
   };
 
-  console.log(commits);
-
   const tagName = getTagName(commits.data[commits.order[0]].tags);
-
   const commitHistory = createCommitHistory(commits, tagName);
-
   const formater = new Intl.DateTimeFormat("en-US");
 
   axios.patch(
