@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "rc-0.0.*"
+  workflow_dispatch:
 
 jobs:
   test:
@@ -12,6 +13,8 @@ jobs:
       matrix:
         node-version: [16.16.0]
     steps:
+      # - name: Tests
+      #   uses: ./.github/actions/test
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup node
@@ -41,4 +44,10 @@ jobs:
       - name: Installing deps
         run: npm ci
       - name: Ticket update
-        run: TOKEN=${{ env.TOKEN }} npm run deploy
+        run: npm run deploy
+      - name: Creating Docker Image
+        uses: actions/docker-buildx@
+
+      -
+      # - name: Sending comment with docker image tag
+      #   run: 123

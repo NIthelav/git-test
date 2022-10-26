@@ -1,0 +1,6 @@
+name: "test"
+description: "Testing application"
+
+runs:
+  using: "composite"
+   - run: npm run test

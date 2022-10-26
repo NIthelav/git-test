@@ -13,7 +13,8 @@ const createCommitHistory = (commits, lastTagName) => {
     if (isOver) return acc;
 
     const hashData = commits.data[cur];
-    const nextTagName = getTagName(hashData.tags);
+    console.log(hashData);
+    const nextTagName = getTagName(hashData.tags || "");
 
     if (!nextTagName || nextTagName !== tagBefore) {
       return acc.concat(`${hashData.login}-${hashData.title}`);
@@ -24,6 +25,8 @@ const createCommitHistory = (commits, lastTagName) => {
 };
 
 const OAuth = process.env.TOKEN;
+
+console.log(process.env);
 
 (async () => {
   const { stdout } = await exec(
@@ -49,6 +52,8 @@ const OAuth = process.env.TOKEN;
     ),
   };
 
+  console.log(commits);
+
   const tagName = getTagName(commits.data[commits.order[0]].tags);
   const commitHistory = createCommitHistory(commits, tagName);
   const formater = new Intl.DateTimeFormat("en-US");
@@ -57,7 +62,10 @@ const OAuth = process.env.TOKEN;
     "https://api.tracker.yandex.net/v2/issues/HOMEWORKSHRI-158",
     {
       summary: `Релиз ${tagName} - ${formater.format(new Date())}`,
-      description: commitHistory.reduce((acc, cur) => `${acc}\n${cur}`, ""),
+      description: commitHistory.reduce(
+        (acc, cur) => `${acc}\n${cur}`,
+        "Коммиты попавшие в релиз:"
+      ),
     },
     {
       headers: {
