@@ -11,9 +11,10 @@ const createCommitHistory = (commits, lastTagName) => {
 
   return commits.order.reduce((acc, cur) => {
     if (isOver) return acc;
+
     const hashData = commits.data[cur];
     const nextTagName = getTagName(hashData.tags);
-    console.log(nextTagName);
+
     if (!nextTagName || nextTagName !== tagBefore) {
       return acc.concat(`${hashData.login}-${hashData.title}`);
     }
