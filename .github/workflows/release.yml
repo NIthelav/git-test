@@ -46,7 +46,7 @@ jobs:
       - name: Ticket update
         run: npm run deploy
       - name: Creating Docker Image
-        uses: actions/docker-buildx@
+        uses: docker/setup-buildx-action@v2
       - name: Manual docker
         run: docker build . --file DockerFile --tag tag
       # - name: Sending comment with docker image tag
