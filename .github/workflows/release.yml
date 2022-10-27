@@ -30,6 +30,7 @@ jobs:
     env:
       TOKEN: ${{ secrets.OAUTH }}
       ACTOR: ${{ github.actor }}
+      TAG_NAME: ${{ github.ref_name }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,5 +53,5 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Manual docker
         run: docker build . --tag ${{ github.ref_name}}
-      # - name: Sending comment with docker image tag
-      #   run: 123
+      - name: Sending comment with docker image tag
+        run: node ./scripts/dockerComment.js

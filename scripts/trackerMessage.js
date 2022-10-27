@@ -56,7 +56,7 @@ const pusherName = process.env.ACTOR;
 
   const tagName = getTagName(commits.data[commits.order[0]].tags);
   const commitHistory = createCommitHistory(commits, tagName);
-  const description = `Ответственный за релиз - ${pusherName}\n ___\nКоммиты попавшие в релиз:`;
+  const description = `Ответственный за релиз - ${pusherName}\n\n\n---\n\n\nКоммиты попавшие в релиз:`;
   const formater = new Intl.DateTimeFormat("en-US");
 
   axios.patch(
